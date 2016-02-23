@@ -1,0 +1,33 @@
+.THIS {
+    padding:0;
+    margin:0;
+}
+
+.THIS.slds.map {
+    position: static;
+    
+}
+.THIS.slds img.leaflet-tile-loaded {
+    
+}
+.THIS.slds .leaflet-control-container .leaflet-bar{
+    border: none;
+    box-shadow: 0 3px 14px rgba(0,0,0,0.4); 
+}
+.THIS .leaflet-control-zoom-out,.THIS .leaflet-control-zoom-in{
+    color: #0070d2;
+}
+.THIS .leaflet-top {
+    z-index: 3;
+}
+
+.THIS.slds .leaflet-popup-pane .leaflet-popup .leaflet-popup-content-wrapper{
+    background-color: white;
+}
+
+.THIS.slds .alertmessage {
+    display: none;
+    color: red;
+    margin: 20px;
+    padding: 10px;
+}

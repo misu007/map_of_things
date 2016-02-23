@@ -1,0 +1,71 @@
+<design:component>
+    
+    <design:attribute 
+                      name="tileServerUrl"
+                      label="*Tile Server URL" 
+                      description="(REQUIRED) For more information, please refer to http://leafletjs.com/"
+                      />  
+    <design:attribute 
+                      name="tileServerAttribution"
+                      label="*Tile Server Attribution" 
+                      description="(REQUIRED) For more information, please refer to http://leafletjs.com/"
+                      />  
+    
+    <design:attribute 
+                      name="mapSizeY"
+                      label="*Height of Map(px)" 
+                      description="(REQUIRED) between 1 and 9999"
+                      />    
+    <design:attribute 
+                      name="targetObj"
+                      label="*Object Name" 
+                      description="(REQUIRED) API Name of Object"
+                      />
+    <design:attribute 
+                      name="targetLat" 
+                      label="*Field Name(Latitude)" 
+                      description="(REQUIRED) API Name of Field"
+                      />
+    <design:attribute 
+                      name="targetLng" 
+                      label="*Field Name(Longitude)" 
+                      description="(REQUIRED) API Name of Field" 
+                      />
+    <design:attribute 
+                      name="targetExplain"
+                      label="*Field Name(Content When Popup)"
+                      description="(REQUIRED) API Name of Field"
+                      />
+    <design:attribute 
+                      name="targetImg" 
+                      label="Field Name(Marker Image URL)" 
+                      description="(OPTIONAL) API Name of Field"
+                      />
+    <design:attribute 
+                      name="iconSizeX" 
+                      label="*Width of Marker(px)" 
+                      description="(REQUIRED) between 1 and 999"
+                      />
+    <design:attribute 
+                      name="iconSizeY" 
+                      label="*Height of Marker(px)" 
+                      description="(REQUIRED) between 1 and 999"
+                      />
+    <design:attribute 
+                      name="markerRotate" 
+                      label="Marker Rotate" 
+                      description="(REQUIRED) When markers move, they would be automatically rotated"
+                      />
+    <design:attribute 
+                      name="syncInterval"
+                      label="Sync Interval(millisecond)"
+                      description="none or  between 1000 and 99999999"
+                      />
+    <design:attribute 
+                      name="moveDuration"
+                      label="*Animate duration(millisecond)"
+                      description="(REQUIRED) between 1 and 99999"
+                      />
+    
+    
+</design:component>
