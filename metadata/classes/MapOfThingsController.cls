@@ -20,10 +20,13 @@ public with sharing class MapOfThingsController {
             String ImgNameR = 'none';
             Map<String, Schema.SObjectType> gt = Schema.getGlobalDescribe();
             Schema.DescribeSObjectResult obj;
-            
             try{                
                 obj = gt.get(objectName).getDescribe();
-                objectNameR = obj.getName();
+                if(obj.isAccessible()){
+                    objectNameR = obj.getName();
+                } else {
+                    objectNameR = '---';
+                }
             } catch(exception e) {
                 objectNameR = '---';
             }
@@ -31,36 +34,44 @@ public with sharing class MapOfThingsController {
             if (objectNameR == objectName){
                 Map<String, Schema.SObjectField> gf = obj.fields.getMap();
                 try{
-                    LatNameR = gf.get(LatName).getDescribe().getName();
+                    if(gf.get(LatName).getDescribe().isAccessible()){
+                        LatNameR = gf.get(LatName).getDescribe().getName();
+                    }
                 } catch(exception e) {
                 }
                 try{
-                    LngNameR = gf.get(LngName).getDescribe().getName();
+                    if(gf.get(LngName).getDescribe().isAccessible()){
+                        LngNameR = gf.get(LngName).getDescribe().getName();
+                    }
                 } catch(exception e) {
                 }
                 try{
-                    ExplainNameR = gf.get(ExplainName).getDescribe().getName();
+                    if(gf.get(ExplainName).getDescribe().isAccessible()){
+                        ExplainNameR = gf.get(ExplainName).getDescribe().getName();
+                    }
                 } catch(exception e) {
                 }
                 if (String.isNotBlank(ImgName)){
                     try{
-                        ImgNameR = gf.get(ImgName).getDescribe().getName();
+                        if(gf.get(ImgName).getDescribe().isAccessible()){
+                            ImgNameR = gf.get(ImgName).getDescribe().getName();
+                        }
                     } catch(exception e) {
                     }                    
                 }
                 if (LatNameR != LatName){
-                    mes += 'Field Name "' + LatName + '" is not found';
+                    mes += 'Field Name "' + LatName + '" is not found or is not accessible';
                 } else if (LngNameR != LngName){
-                    mes += 'Field Name "' + LngName + '" is not found';                
+                    mes += 'Field Name "' + LngName + '" is not found or is not accessible';                
                 } else if (ExplainNameR != ExplainName){
-                    mes += 'Field Name "' + ExplainName + '" is not found';                
+                    mes += 'Field Name "' + ExplainName + '" is not found or is not accessible';                
                 } else if (String.isNotBlank(ImgName) && ImgNameR != ImgName){
-                    mes += 'Field Name "' + ImgName + '" is not found';                
+                    mes += 'Field Name "' + ImgName + '" is not found or is not accessible';                
                 } else {
                     mes = 'success';
                 }
             } else {
-                mes += 'Object Name "' + objectName + '" is not found';
+                mes += 'Object Name "' + objectName + '" is not found or is not accessible';
             }
             
             
@@ -71,14 +82,35 @@ public with sharing class MapOfThingsController {
     @AuraEnabled
     //get marker object
     public static List<Object> getTargets(String objectName, String LatName, String LngName, String ExplainName, String ImgName) {
-        String query1 = 'SELECT Id, ' + LatName + ', ' + LngName + ', ' + ExplainName;
-        if (String.isNotBlank(ImgName)){
-            query1 += ', ' + ImgName;
+        List<Object> targets = new List<Object>();
+        
+        try{
+            Schema.DescribeSObjectResult obj = Schema.getGlobalDescribe().get(objectName).getDescribe();
+            Map<String, Schema.SObjectField> gf = obj.fields.getMap();
+            
+            Boolean boolObj = obj.isAccessible();
+            Boolean boolLat = gf.get(LatName).getDescribe().isAccessible();
+            Boolean boolLng = gf.get(LngName).getDescribe().isAccessible();
+            Boolean boolExplain = gf.get(ExplainName).getDescribe().isAccessible();
+            Boolean boolImg = String.isBlank(ImgName) ? true: gf.get(ImgName).getDescribe().isAccessible() ? true: false;
+            
+            if (boolObj && boolLat && boolLng && boolExplain && boolImg){
+                String query1 = 
+                    'SELECT Id, ' + String.escapeSingleQuotes(LatName)
+                    + ', ' + String.escapeSingleQuotes(LngName)
+                    + ', ' + String.escapeSingleQuotes(ExplainName);
+                
+                if (String.isNotBlank(ImgName)){
+                    query1 += ', ' + String.escapeSingleQuotes(ImgName);
+                }
+                query1 += ' FROM ' + String.escapeSingleQuotes(objectName)
+                    + ' WHERE ' + String.escapeSingleQuotes(LatName) +' != null ' 
+                    + 'AND ' + String.escapeSingleQuotes(LngName) + ' != null';
+                targets = database.query(query1);
+            }
+        } catch(exception e) {
         }
-        query1 += ' FROM ' + objectName
-            + ' WHERE ' + LatName +' != null AND ' + LngName + ' != null';
-        List<Object> mycars = database.query(query1);
-        return mycars;
+        return targets;
     } 
     
 }

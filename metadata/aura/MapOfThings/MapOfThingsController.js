@@ -1,28 +1,19 @@
 ({
     //init
     doInit: function(cmp, event, helper){
+        cmp.set("v.leaflet", L);
         var varCheck = 999;
         varCheck = helper.doVarCheck(cmp);
-        if (varCheck == 0){
+        if (varCheck === 0){
             cmp.set("v.alertMessage", '');
-	        helper.doHealthCheck(cmp);
+            helper.doHealthCheck(cmp);
         }
-    },
-    
-    
-    doneRendering: function(cmp, event, helper){
-        if (cmp.get("v.alertMessage")){
-            cmp.find("alertmessage").getElement().style.display = "block";
-        } else if (cmp.get("v.markerStatus")){
-            window.setTimeout(
-                $A.getCallback(function() {
-                    if (cmp.isValid()) {
-                        helper.updatetarkers(cmp);
-                    }
-                }), cmp.get("v.syncInterval"));            
-        }
-    },
-    
-    
-    
+        window.setInterval(
+            $A.getCallback(function() {
+                if (cmp.isValid() && cmp.get("v.LifeCycle") === "5") {
+                    helper.updateMarkerRecords(cmp);
+                }
+            }), cmp.get("v.syncInterval")
+        );
+    }
 })

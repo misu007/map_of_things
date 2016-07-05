@@ -26,8 +26,10 @@
 }
 
 .THIS.slds .alertmessage {
-    display: none;
     color: red;
     margin: 20px;
     padding: 10px;
+}
+.THIS.slds .hidden {
+    display: none;
 }

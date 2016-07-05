@@ -1,68 +1,62 @@
 <aura:component description="Map Of Things Lightning Component"
-                implements="flexipage:availableForAllPageTypes" controller="MapOfThingsController">
-    
-    <!--Changeable attribute-->
-    <aura:attribute name="tileServerUrl" type="String" default="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
-    <aura:attribute name="tileServerAttribution" type="String" default="&copy; OpenStreetMap"/>
-    <aura:attribute name="mapSizeY" type="String" default="800"/>
-    <aura:attribute name="targetObj" type="String" default="misu007__ThingsDemo__c"/>
-    <aura:attribute name="targetLat" type="String" default="misu007__Lat__c"/>
-    <aura:attribute name="targetLng" type="String" default="misu007__Lng__c"/>
-    <aura:attribute name="targetExplain" type="String" default="misu007__Popup__c"/>
-    <aura:attribute name="targetImg" type="String" default=""/>
-    <aura:attribute name="iconSizeX" type="String" default="25"/>
-    <aura:attribute name="iconSizeY" type="String" default="82"/>
-    <aura:attribute name="markerRotate" type="Boolean" default="true"/>
-    <aura:attribute name="syncInterval" type="String" default="2000"/>
-    <aura:attribute name="moveDuration" type="String" default="3000"/>
-    
-    <!--Changeable attribute : mean-->
-    <aura:attribute name="tileServerUrl_mean" type="String" default="*Tile Server URL"/>
-    <aura:attribute name="tileServerAttribution_mean" type="String" default="*Tile Server Attribution"/>
-    <aura:attribute name="mapSizeY_mean" type="String" default="*Height of Map"/>
-    <aura:attribute name="targetObj_mean" type="String" default="*Object Name"/>
-    <aura:attribute name="targetLat_mean" type="String" default="*Field Name(Latitude)"/>
-    <aura:attribute name="targetLng_mean" type="String" default="*Field Name(Longitude)"/>
-    <aura:attribute name="targetExplain_mean" type="String" default="*Field Name(Content When Popup)"/>
-    <aura:attribute name="targetImg_mean" type="String" default="Field Name(Marker Image URL)"/>
-    <aura:attribute name="iconSizeX_mean" type="String" default="*Width of Marker"/>
-    <aura:attribute name="iconSizeY_mean" type="String" default="*Height of Marker"/>
-    <aura:attribute name="syncInterval_mean" type="String" default="Sync Interval"/>
-    <aura:attribute name="moveDuration_mean" type="String" default="*Animate duration"/>
-
-    <!--Fixed attribute-->
-    <aura:attribute name="mapSizeX" type="String" default="100%"/>
-    <aura:attribute name="mapCenterLat" type="String" default="35.680636"/>
-    <aura:attribute name="mapCenterLng" type="String" default="139.763041"/>
-    <aura:attribute name="mapInitialZoom" type="String" default="14"/>
-    <aura:attribute name="circumference" type="String" default="40054782"/>
-    <aura:attribute name="minDistance" type="String" default="5"/>
-    <aura:attribute name="componentStatus" type="Boolean" default="false"/>
-    <aura:attribute name="markerStatus" type="Boolean" default="false"/>
-    <aura:attribute name="animationStat" type="Boolean" default="false"/>
-    <aura:attribute name="animationId" type="String" default=""/>    
-    <aura:attribute name="map" type="Object"/>
-    <aura:attribute name="tarkers" type="Object[]"/>
-    <aura:attribute name="markers" type="Object[]"/>
-    <aura:attribute name="alertMessage" type="String" default=""/>
-    
-    <!--Event-->    
-    <aura:handler event="aura:doneRendering" value="{!this}" action="{!c.doneRendering}"/>
-    
-    <!--CSS, javascript-->    
-    <ltng:require styles="/resource/misu007__mapofthings_leaflet/leaflet.css,
-                          /resource/misu007__slds/assets/styles/salesforce-lightning-design-system-ltng.min.css"
-                  scripts="/resource/misu007__mapofthings_leaflet/leaflet.js,
-                           /resource/misu007__mapofthings_leaflet/markerRotate.js"
+                implements="flexipage:availableForAllPageTypes,force:appHostable,forceCommunity:availableForAllPageTypes"
+                controller="MapOfThingsController" access="global">
+    <!--  Changeable attribute  -->
+    <aura:attribute access="global" name="tileServerUrl" type="String" default="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
+    <aura:attribute access="global" name="tileServerAttribution" type="String" default="&copy; OpenStreetMap"/>
+    <aura:attribute access="global" name="mapSizeY" type="String" default="800"/>
+    <aura:attribute access="global" name="targetObj" type="String" default="misu007__ThingsDemo__c"/>
+    <aura:attribute access="global" name="targetLat" type="String" default="misu007__Lat__c"/>
+    <aura:attribute access="global" name="targetLng" type="String" default="misu007__Lng__c"/>
+    <aura:attribute access="global" name="targetExplain" type="String" default="misu007__Popup__c"/>
+    <aura:attribute access="global" name="targetImg" type="String" default=""/>
+    <aura:attribute access="global" name="iconSizeX" type="String" default="25"/>
+    <aura:attribute access="global" name="iconSizeY" type="String" default="82"/>
+    <aura:attribute access="global" name="markerRotate" type="Boolean" default="true"/>
+    <aura:attribute access="global" name="syncInterval" type="String" default="2000"/>
+    <aura:attribute access="global" name="moveDuration" type="String" default="3000"/>
+    <!--  Changeable attribute : mean  -->
+    <aura:attribute access="global" name="tileServerUrl_mean" type="String" default="*Tile Server URL"/>
+    <aura:attribute access="global" name="tileServerAttribution_mean" type="String" default="*Tile Server Attribution"/>
+    <aura:attribute access="global" name="mapSizeY_mean" type="String" default="*Height of Map"/>
+    <aura:attribute access="global" name="targetObj_mean" type="String" default="*Object Name"/>
+    <aura:attribute access="global" name="targetLat_mean" type="String" default="*Field Name(Latitude)"/>
+    <aura:attribute access="global" name="targetLng_mean" type="String" default="*Field Name(Longitude)"/>
+    <aura:attribute access="global" name="targetExplain_mean" type="String" default="*Field Name(Content When Popup)"/>
+    <aura:attribute access="global" name="targetImg_mean" type="String" default="Field Name(Marker Image URL)"/>
+    <aura:attribute access="global" name="iconSizeX_mean" type="String" default="*Width of Marker"/>
+    <aura:attribute access="global" name="iconSizeY_mean" type="String" default="*Height of Marker"/>
+    <aura:attribute access="global" name="syncInterval_mean" type="String" default="Sync Interval"/>
+    <aura:attribute access="global" name="moveDuration_mean" type="String" default="*Marker Move Duration"/>
+    <!--  Fixed attribute  -->
+    <aura:attribute access="global" name="mapSizeX" type="String" default="100%"/>
+    <aura:attribute access="global" name="mapCenterLat" type="String" default="37.794031"/>
+    <aura:attribute access="global" name="mapCenterLng" type="String" default="-122.394739"/>
+    <aura:attribute access="global" name="mapInitialZoom" type="String" default="14"/>
+    <aura:attribute access="global" name="circumference" type="String" default="40054782"/>
+    <aura:attribute access="global" name="minDistance" type="String" default="5"/>
+    <aura:attribute access="global" name="componentStatus" type="Boolean" default="false"/>
+    <aura:attribute access="global" name="animationStat" type="Boolean" default="false"/>
+    <aura:attribute access="global" name="animationId" type="String" default=""/>    
+    <aura:attribute access="global" name="map" type="Object"/>
+    <aura:attribute access="global" name="markerRecords" type="Object[]"/>
+    <aura:attribute access="global" name="markers" type="Object[]"/>
+    <aura:attribute access="global" name="alertMessage" type="String" default=""/>
+    <aura:attribute access="global" name="LifeCycle" type="String" default="1"/>
+    <aura:attribute access="global" name="defaultIconImgUrl" type="String" default="{!$Resource.misu007__mapofthings_leaflet +  '/images/marker-icon.png'}"/>
+    <!--  CSS, javascript  -->    
+    <ltng:require styles="{!join(',',
+                           $Resource.misu007__mapofthings_leaflet +  '/leaflet.css',
+                           $Resource.misu007__slds + '/assets/styles/salesforce-lightning-design-system-ltng.min.css')}"
+                  scripts="{!join(',',
+                           $Resource.misu007__mapofthings_leaflet +  '/leaflet.js',
+                           $Resource.misu007__mapofthings_leaflet + '/markerRotate.js')}"
                   afterScriptsLoaded="{!c.doInit}"/>  
-    
     <div class="slds">        
-        
-        <!--body(map)-->
+        <!--  body(map)  -->
         <div class="map" id="{!globalId + '_map'}"></div>
-        
-        <!--body(alert)-->
-        <div class="alertmessage" aura:id="alertmessage">
+        <!--  body(alert)  -->
+        <div class="alertmessage hidden" aura:id="alertmessage">
             <p>{!v.alertMessage}</p>
         </div>
     </div>
