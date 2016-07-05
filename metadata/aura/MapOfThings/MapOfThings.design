@@ -63,7 +63,7 @@
                       />
     <design:attribute 
                       name="moveDuration"
-                      label="*Animate duration(millisecond)"
+                      label="*Marker Move duration(millisecond)"
                       description="(REQUIRED) between 1 and 99999"
                       />
     
